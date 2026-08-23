@@ -5,7 +5,7 @@ import {
   SeparatorBuilder,
   SeparatorSpacingSize,
 } from 'discord.js';
-import { getDb } from '../../utils/db.js';
+import { connectDb, Ticket, Infraction } from '../../utils/db.js';
 import { getNetwork, isNetworkLeader } from '../../utils/permissions.js';
 import { Colors } from '../../utils/containers.js';
 import { E } from '../../utils/emojis.js';
@@ -14,6 +14,7 @@ const CV2EPH = MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral;
 
 export async function executeManage(interaction) {
   await interaction.deferReply({ flags: CV2EPH });
+  await connectDb();
 
   const network = await getNetwork(interaction.guildId);
   if (!network) return noNetworkReply(interaction);
@@ -37,14 +38,9 @@ export async function executeManage(interaction) {
     .sort((a, b) => b.members.size - a.members.size)
     .first(10);
 
-  const db = await getDb();
-  let totalInfractions = 0;
-  for (const [uid] of allMembers) {
-    const infs = db.data.infractions[uid] ?? [];
-    totalInfractions += infs.filter(i => i.networkId === network.id).length;
-  }
-
-  const openTickets      = Object.values(db.data.tickets).filter(t => t.guildId === interaction.guildId && t.status === 'open').length;
+  const db             = null; // unused — direct mongo below
+  let totalInfractions = await Infraction.countDocuments({ networkId: network.id });
+  const openTickets    = await Ticket.countDocuments({ guildId: interaction.guildId, status: 'open' });
   const blRole           = guild.roles.cache.get(network.blacklistRoleId);
   const blacklistedCount = blRole ? blRole.members.size : 0;
   const textChannels     = guild.channels.cache.filter(ch => ch.type === 0).size;

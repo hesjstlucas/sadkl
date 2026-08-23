@@ -19,7 +19,7 @@ const CV2    = MessageFlags.IsComponentsV2;
 const EPH    = MessageFlags.Ephemeral;
 const CV2EPH = CV2 | EPH;
 import { v4 as uuidv4 } from 'uuid';
-import { getDb, saveDb } from '../../utils/db.js';
+import { connectDb, Ticket, Network } from '../../utils/db.js';
 import { getNetwork, getAllNetworks } from '../../utils/permissions.js';
 import { Colors } from '../../utils/containers.js';
 import { E, eid } from '../../utils/emojis.js';
@@ -243,11 +243,11 @@ export async function handleOpenModal(interaction) {
 // ─── Step 5: Modal submitted — create the ticket channel ──────────────────
 export async function handleInquirySubmit(interaction) {
   await interaction.deferReply({ flags: CV2EPH });
+  await connectDb();
 
   const key     = interaction.customId.replace('sp_inquiry_submit:', '');
   const inquiry = interaction.fields.getTextInputValue('inquiry');
   const guild   = interaction.guild;
-  const db      = await getDb();
   const network = await getNetwork(guild.id);
 
   if (!network) {
@@ -281,7 +281,7 @@ export async function handleInquirySubmit(interaction) {
   // ── Determine staff role ──
   let staffRoleId = network[typeConfig.staffRoleKey] ?? null;
   if (type === 'server_leadership' && networkId) {
-    const targetNet = db.data.networks[networkId];
+    const targetNet = await Network.findOne({ id: networkId }).lean();
     staffRoleId = targetNet?.serverLeaderRoleId ?? null;
   }
 
@@ -323,8 +323,8 @@ export async function handleInquirySubmit(interaction) {
     topic: `Ticket ${ticketId} | ${interaction.user.tag} | ${typeConfig.label}`,
   });
 
-  // ── Save to db ──
-  db.data.tickets[ticketId] = {
+  // ── Save to MongoDB ──
+  await Ticket.create({
     id:               ticketId,
     channelId:        ticketChannel.id,
     guildId:          guild.id,
@@ -336,8 +336,7 @@ export async function handleInquirySubmit(interaction) {
     claimedBy:        null,
     createdAt:        Date.now(),
     closeRequestedAt: null,
-  };
-  await saveDb();
+  });
 
   // ── Ticket info container ─────────────────────────────────────────────────
   const info = new ContainerBuilder().setAccentColor(Colors.DEFAULT);

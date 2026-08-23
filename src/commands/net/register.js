@@ -6,7 +6,7 @@ import {
   SeparatorSpacingSize,
 } from 'discord.js';
 import { v4 as uuidv4 } from 'uuid';
-import { getDb, saveDb } from '../../utils/db.js';
+import { connectDb, Network } from '../../utils/db.js';
 import { Colors } from '../../utils/containers.js';
 import { E } from '../../utils/emojis.js';
 
@@ -14,6 +14,7 @@ const CV2EPH = MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral;
 
 export async function execute(interaction) {
   await interaction.deferReply({ flags: CV2EPH });
+  await connectDb();
 
   const name           = interaction.options.getString('name');
   const invite         = interaction.options.getString('invite');
@@ -26,9 +27,8 @@ export async function execute(interaction) {
   const guildId        = interaction.guildId;
 
   const leadership = leaderRaw.split(',').map(s => s.trim()).filter(Boolean);
-  const db = await getDb();
 
-  const existing = Object.values(db.data.networks).find(n => n.guildId === guildId);
+  const existing = await Network.findOne({ guildId }).lean();
   if (existing) {
     const c = new ContainerBuilder().setAccentColor(Colors.DANGER);
     c.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## ${E.down}  Already Registered`));
@@ -42,7 +42,7 @@ export async function execute(interaction) {
   }
 
   const id = uuidv4();
-  db.data.networks[id] = {
+  await Network.create({
     id, name, guildId, invite,
     memberRoleId:     memberRole.id,
     blacklistRoleId:  blRole.id,
@@ -53,8 +53,7 @@ export async function execute(interaction) {
     leadership,
     registeredAt: Date.now(),
     registeredBy: interaction.user.id,
-  };
-  await saveDb();
+  });
 
   const c = new ContainerBuilder().setAccentColor(Colors.SUCCESS);
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## ${E.check}  Server Registered`));

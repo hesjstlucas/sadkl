@@ -12,7 +12,7 @@ import {
   TextInputStyle,
   PermissionFlagsBits,
 } from 'discord.js';
-import { getDb, saveDb } from '../utils/db.js';
+import { connectDb, Ticket } from '../utils/db.js';
 import { Colors } from '../utils/containers.js';
 import { E, eid } from '../utils/emojis.js';
 
@@ -24,9 +24,9 @@ const CLOSE_TIMEOUT_MS = 24 * 60 * 60 * 1000;
 
 // ─── Claim ─────────────────────────────────────────────────────────────────
 export async function handleClaim(interaction) {
+  await connectDb();
   const ticketId = interaction.customId.split(':')[1];
-  const db       = await getDb();
-  const ticket   = db.data.tickets[ticketId];
+  const ticket   = await Ticket.findOne({ id: ticketId });
 
   if (!ticket) return interaction.reply({ content: '❌ Ticket not found.', flags: EPH });
   if (ticket.claimedBy) {
@@ -37,11 +37,11 @@ export async function handleClaim(interaction) {
   }
 
   ticket.claimedBy = interaction.user.id;
-  await saveDb();
+  await ticket.save();
 
   const c = new ContainerBuilder().setAccentColor(Colors.SUCCESS);
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
-    `## ✋  Ticket Claimed\n<@${interaction.user.id}> has taken ownership of this ticket.`
+    `## ${E.members}  Ticket Claimed\n<@${interaction.user.id}> has taken ownership of this ticket.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
@@ -51,9 +51,9 @@ export async function handleClaim(interaction) {
 
 // ─── Staff Panel ──────────────────────────────────────────────────────────
 export async function handleStaffPanel(interaction) {
+  await connectDb();
   const ticketId = interaction.customId.split(':')[1];
-  const db       = await getDb();
-  const ticket   = db.data.tickets[ticketId];
+  const ticket   = await Ticket.findOne({ id: ticketId });
 
   if (!ticket) return interaction.reply({ content: '❌ Ticket not found.', flags: EPH });
 
@@ -111,9 +111,9 @@ export async function handleStaffPanel(interaction) {
 
 // ─── Close Request ────────────────────────────────────────────────────────
 export async function handleCloseRequest(interaction) {
+  await connectDb();
   const ticketId = interaction.customId.split(':')[1];
-  const db       = await getDb();
-  const ticket   = db.data.tickets[ticketId];
+  const ticket   = await Ticket.findOne({ id: ticketId });
 
   if (!ticket || ticket.status === 'closed') {
     return interaction.reply({ content: '❌ Ticket not found or already closed.', flags: EPH });
@@ -121,11 +121,11 @@ export async function handleCloseRequest(interaction) {
 
   ticket.closeRequestedAt = Date.now();
   ticket.status = 'close_requested';
-  await saveDb();
+  await ticket.save();
 
   const c = new ContainerBuilder().setAccentColor(Colors.WARNING);
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(`<@${ticket.userId}>`));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('## 🔔  Close Request Sent'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## ${E.ticket}  Close Request Sent`));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
     `<@${ticket.userId}>, a staff member has requested this ticket be closed.\n` +
@@ -152,8 +152,8 @@ export async function handleCloseRequest(interaction) {
   await interaction.reply({ components: [c, row], flags: CV2 });
 
   setTimeout(async () => {
-    const dbFresh = await getDb();
-    const t = dbFresh.data.tickets[ticketId];
+    await connectDb();
+    const t = await Ticket.findOne({ id: ticketId });
     if (!t || t.status !== 'close_requested') return;
     await closeTicket(interaction.client, t, 'Auto-closed after 24-hour inactivity.');
   }, CLOSE_TIMEOUT_MS);
@@ -161,9 +161,9 @@ export async function handleCloseRequest(interaction) {
 
 // ─── Don't Close ──────────────────────────────────────────────────────────
 export async function handleDontClose(interaction) {
+  await connectDb();
   const ticketId = interaction.customId.split(':')[1];
-  const db       = await getDb();
-  const ticket   = db.data.tickets[ticketId];
+  const ticket   = await Ticket.findOne({ id: ticketId });
 
   if (!ticket) return interaction.reply({ content: '❌ Ticket not found.', flags: EPH });
   if (interaction.user.id !== ticket.userId) {
@@ -172,11 +172,11 @@ export async function handleDontClose(interaction) {
 
   ticket.status = 'open';
   ticket.closeRequestedAt = null;
-  await saveDb();
+  await ticket.save();
 
   const c = new ContainerBuilder().setAccentColor(Colors.SUCCESS);
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
-    `## ✅  Close Request Cancelled\n<@${interaction.user.id}> has indicated they still need assistance. The close request has been withdrawn.`
+    `## ${E.check}  Close Request Cancelled\n<@${interaction.user.id}> still needs assistance. The close request has been withdrawn.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
@@ -186,9 +186,9 @@ export async function handleDontClose(interaction) {
 
 // ─── Confirm Close ────────────────────────────────────────────────────────
 export async function handleConfirmClose(interaction) {
+  await connectDb();
   const ticketId = interaction.customId.split(':')[1];
-  const db       = await getDb();
-  const ticket   = db.data.tickets[ticketId];
+  const ticket   = await Ticket.findOne({ id: ticketId });
 
   if (!ticket) return interaction.reply({ content: '❌ Ticket not found.', flags: EPH });
 
@@ -200,9 +200,9 @@ export async function handleConfirmClose(interaction) {
 const ESCALATION_MAP = { general: 'ia', ia: 'management', management: 'management' };
 
 export async function handleEscalate(interaction) {
+  await connectDb();
   const ticketId = interaction.customId.split(':')[1];
-  const db       = await getDb();
-  const ticket   = db.data.tickets[ticketId];
+  const ticket   = await Ticket.findOne({ id: ticketId });
 
   if (!ticket) return interaction.reply({ content: '❌ Ticket not found.', flags: EPH });
 
@@ -212,11 +212,11 @@ export async function handleEscalate(interaction) {
   }
 
   ticket.type = newType;
-  await saveDb();
+  await ticket.save();
 
   const c = new ContainerBuilder().setAccentColor(Colors.WARNING);
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
-    `## ⬆️  Ticket Escalated\nThis ticket has been escalated to **${newType.toUpperCase()}** level.`
+    `## ${E.up}  Ticket Escalated\nThis ticket has been escalated to **${newType.toUpperCase()}** level.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
@@ -258,7 +258,7 @@ export async function handleRenameSubmit(interaction) {
 
   const c = new ContainerBuilder().setAccentColor(Colors.SUCCESS);
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
-    `## ✏️  Ticket Renamed\nChannel has been renamed to **${newName}**.`
+    `## ${E.line}  Ticket Renamed\nChannel has been renamed to **${newName}**.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
@@ -300,7 +300,7 @@ export async function handleAddUserSubmit(interaction) {
 
   const c = new ContainerBuilder().setAccentColor(Colors.SUCCESS);
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
-    `## ➕  User Added\n<@${userId}> has been granted access to this ticket.`
+    `## ${E.member}  User Added\n<@${userId}> has been granted access to this ticket.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
@@ -338,7 +338,7 @@ export async function handleRemoveUserSubmit(interaction) {
 
   const c = new ContainerBuilder().setAccentColor(Colors.DANGER);
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
-    `## ➖  User Removed\n<@${userId}> has been removed from this ticket.`
+    `## ${E.kick}  User Removed\n<@${userId}> has been removed from this ticket.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
@@ -348,16 +348,15 @@ export async function handleRemoveUserSubmit(interaction) {
 
 // ─── Internal close helper ────────────────────────────────────────────────
 async function closeTicket(client, ticket, reason) {
-  const db = await getDb();
   ticket.status   = 'closed';
   ticket.closedAt = Date.now();
-  await saveDb();
+  await ticket.save();
 
   const channel = client.channels.cache.get(ticket.channelId);
   if (!channel) return;
 
   const c = new ContainerBuilder().setAccentColor(0x4e5058);
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('## 🔒  Ticket Closed'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## ${E.kick}  Ticket Closed`));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
     `**Reason** ${reason}\n**Closed At** <t:${Math.floor(Date.now() / 1000)}:F>`
@@ -368,6 +367,5 @@ async function closeTicket(client, ticket, reason) {
   ));
 
   await channel.send({ components: [c], flags: CV2 }).catch(() => null);
-
   setTimeout(() => channel.delete('Ticket closed').catch(() => null), 10_000);
 }
