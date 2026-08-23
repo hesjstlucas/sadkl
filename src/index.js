@@ -1,8 +1,9 @@
 import 'dotenv/config';
 import { Client, GatewayIntentBits, Partials } from 'discord.js';
-import { loadCommands }  from './handlers/commandLoader.js';
-import { loadEvents }    from './handlers/eventLoader.js';
+import { loadCommands }   from './handlers/commandLoader.js';
+import { loadEvents }     from './handlers/eventLoader.js';
 import { startKeepAlive } from './utils/keepAlive.js';
+import { connectDb }      from './utils/db.js';
 
 const client = new Client({
   intents: [
@@ -12,6 +13,9 @@ const client = new Client({
   ],
   partials: [Partials.GuildMember],
 });
+
+// Connect to MongoDB immediately on startup
+await connectDb();
 
 // Load commands into client collection
 client.commands = await loadCommands();

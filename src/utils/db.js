@@ -5,9 +5,17 @@ let connected = false;
 
 export async function connectDb() {
   if (connected) return;
+
+  console.log('[DB] Connecting to MongoDB...');
+
+  mongoose.connection.on('connecting',    () => console.log('[DB] Establishing connection...'));
+  mongoose.connection.on('connected',     () => console.log('[DB] ✅ Connected to MongoDB'));
+  mongoose.connection.on('disconnected',  () => console.log('[DB] ⚠️  Disconnected from MongoDB'));
+  mongoose.connection.on('reconnected',   () => console.log('[DB] 🔄 Reconnected to MongoDB'));
+  mongoose.connection.on('error',    (err) => console.error('[DB] ❌ Connection error:', err.message));
+
   await mongoose.connect(process.env.MONGODB_URI);
   connected = true;
-  console.log('[DB] Connected to MongoDB');
 }
 
 // ─── Schemas ───────────────────────────────────────────────────────────────
