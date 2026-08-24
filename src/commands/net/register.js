@@ -17,16 +17,12 @@ export async function execute(interaction) {
   await connectDb();
 
   const name           = interaction.options.getString('name');
-  const invite         = interaction.options.getString('invite');
-  const leaderRaw      = interaction.options.getString('leadership');
   const memberRole     = interaction.options.getRole('member_role');
   const blRole         = interaction.options.getRole('blacklist_role');
   const leadershipRole = interaction.options.getRole('leadership_role');
   const hrRole         = interaction.options.getRole('hr_role');
   const staffRole      = interaction.options.getRole('staff_role');
   const guildId        = interaction.guildId;
-
-  const leadership = leaderRaw.split(',').map(s => s.trim()).filter(Boolean);
 
   const existing = await Network.findOne({ guildId }).lean();
   if (existing) {
@@ -43,14 +39,16 @@ export async function execute(interaction) {
 
   const id = uuidv4();
   await Network.create({
-    id, name, guildId, invite,
+    id, name, guildId,
     memberRoleId:     memberRole.id,
     blacklistRoleId:  blRole.id,
     communityRoleId:  memberRole.id,
     leadershipRoleId: leadershipRole.id,
     hrRoleId:         hrRole.id,
     staffRoleId:      staffRole.id,
-    leadership,
+    // leadership array and invite left empty — kept in schema for backwards compat
+    leadership:   [],
+    invite:       null,
     registeredAt: Date.now(),
     registeredBy: interaction.user.id,
   });
@@ -59,18 +57,16 @@ export async function execute(interaction) {
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## ${E.check}  Server Registered`));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
-    `**${name}** has been successfully added to the Vyron Development.`
+    `**${name}** has been successfully added to the Vyron Development Network.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(false).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
     `**Network ID** \`${id}\`\n` +
-    `**Invite** ${invite}\n` +
     `**Community Role** <@&${memberRole.id}>\n` +
     `**Blacklist Role** <@&${blRole.id}>\n` +
     `**Leadership Role** <@&${leadershipRole.id}>\n` +
     `**HR Role** <@&${hrRole.id}>\n` +
-    `**Staff Role** <@&${staffRole.id}>\n` +
-    `**Leadership IDs** ${leadership.map(l => `<@${l}>`).join(', ')}`
+    `**Staff Role** <@&${staffRole.id}>`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));

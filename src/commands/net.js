@@ -17,10 +17,8 @@ export const data = new SlashCommandBuilder()
   // register
   .addSubcommand(sub =>
     sub.setName('register')
-       .setDescription('Register this server into the Vyron Development')
+       .setDescription('Register this server into the Vyron Development Network')
        .addStringOption(o => o.setName('name').setDescription('Server display name').setRequired(true))
-       .addStringOption(o => o.setName('invite').setDescription('Permanent invite link').setRequired(true))
-       .addStringOption(o => o.setName('leadership').setDescription('Leadership user IDs (comma-separated)').setRequired(true))
        .addRoleOption(o => o.setName('member_role').setDescription('Community member role').setRequired(true))
        .addRoleOption(o => o.setName('blacklist_role').setDescription('Blacklist role').setRequired(true))
        .addRoleOption(o => o.setName('leadership_role').setDescription('Leadership role').setRequired(true))

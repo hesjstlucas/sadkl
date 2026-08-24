@@ -71,7 +71,7 @@ export async function executeManage(interaction) {
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(false).setSpacing(SeparatorSpacingSize.Small));
 
-  const leaderMentions = network.leadership.map(id => `<@${id}>`).join(', ') || '—';
+  const leaderMentions = network.leadershipRoleId ? `<@&${network.leadershipRoleId}>` : '—';
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
     `### ${E.network}  Network Leadership\n${leaderMentions}`
   ));

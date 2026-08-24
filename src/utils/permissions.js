@@ -13,12 +13,14 @@ export async function getAllNetworks() {
 export async function isNetworkLeader(member, network) {
   if (!network) return false;
   if (member.permissions.has('Administrator')) return true;
-  return network.leadership.includes(member.id);
+  // Use the leadership role — no more hardcoded ID list
+  if (network.leadershipRoleId && member.roles.cache.has(network.leadershipRoleId)) return true;
+  return false;
 }
 
 export async function isAnyNetworkLeader(member) {
   await connectDb();
   if (member.permissions.has('Administrator')) return true;
   const networks = await Network.find().lean();
-  return networks.some(n => n.leadership.includes(member.id));
+  return networks.some(n => n.leadershipRoleId && member.roles.cache.has(n.leadershipRoleId));
 }
