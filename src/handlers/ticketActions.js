@@ -44,7 +44,7 @@ export async function handleClaim(interaction) {
     `## ${E.members}  Ticket Claimed\n<@${interaction.user.id}> has taken ownership of this ticket.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   await interaction.reply({ components: [c], flags: CV2 });
 }
@@ -78,7 +78,7 @@ export async function handleStaffPanel(interaction) {
     'Grant or revoke access to this ticket channel.'
   ));
   panelC.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  panelC.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  panelC.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   const escalateBtn = new ButtonBuilder()
     .setCustomId(`ticket_escalate:${ticketId}`)
@@ -133,7 +133,7 @@ export async function handleCloseRequest(interaction) {
     `Click **Don't Close** if you still need assistance.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   const dontClose = new ButtonBuilder()
     .setCustomId(`ticket_dont_close:${ticketId}`)
@@ -179,7 +179,7 @@ export async function handleDontClose(interaction) {
     `## ${E.check}  Close Request Cancelled\n<@${interaction.user.id}> still needs assistance. The close request has been withdrawn.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   await interaction.update({ components: [c], flags: CV2 });
 }
@@ -219,7 +219,7 @@ export async function handleEscalate(interaction) {
     `## ${E.up}  Ticket Escalated\nThis ticket has been escalated to **${newType.toUpperCase()}** level.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   await interaction.reply({ components: [c], flags: CV2 });
 }
@@ -261,7 +261,7 @@ export async function handleRenameSubmit(interaction) {
     `## ${E.line}  Ticket Renamed\nChannel has been renamed to **${newName}**.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   await interaction.reply({ components: [c], flags: CV2EPH });
 }
@@ -303,7 +303,7 @@ export async function handleAddUserSubmit(interaction) {
     `## ${E.member}  User Added\n<@${userId}> has been granted access to this ticket.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   await interaction.reply({ components: [c], flags: CV2EPH });
 }
@@ -341,7 +341,7 @@ export async function handleRemoveUserSubmit(interaction) {
     `## ${E.kick}  User Removed\n<@${userId}> has been removed from this ticket.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   await interaction.reply({ components: [c], flags: CV2EPH });
 }
@@ -363,7 +363,7 @@ async function closeTicket(client, ticket, reason) {
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
-    '-# This channel will be deleted in 10 seconds. · Paralix Network Management'
+    '-# This channel will be deleted in 10 seconds. · Vyron Development'
   ));
 
   await channel.send({ components: [c], flags: CV2 }).catch(() => null);

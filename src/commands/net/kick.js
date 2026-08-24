@@ -52,7 +52,7 @@ export async function executeKick(interaction) {
     `You are about to kick <@${target.id}> from a network server.\nSelect the server below.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   await interaction.reply({
     components: [c, new ActionRowBuilder().addComponents(select)],
@@ -78,7 +78,7 @@ export async function handleKickSelect(interaction) {
     c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
     c.addTextDisplayComponents(new TextDisplayBuilder().setContent('The bot is not in that server.'));
     c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
     await interaction.editReply({ components: [c], flags: CV2EPH });
     return;
   }
@@ -103,7 +103,7 @@ export async function handleKickSelect(interaction) {
     `**Status** ${kicked ? 'Successfully kicked' : 'User was not in the server or kick failed'}`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   await interaction.editReply({ components: [c], flags: CV2EPH });
 }
@@ -114,7 +114,7 @@ function noNetworkReply(interaction) {
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent('This server has not been registered in the network.'));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
   return interaction.reply({ components: [c], flags: CV2EPH });
 }
 
@@ -124,6 +124,6 @@ function noPerm(interaction) {
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent('Only Network Leaders and Administrators can use this command.'));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
   return interaction.reply({ components: [c], flags: CV2EPH });
 }

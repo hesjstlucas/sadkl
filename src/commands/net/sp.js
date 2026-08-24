@@ -75,7 +75,7 @@ export async function executeSp(interaction) {
       `## ${E.down}  Not Registered\nRegister this server with \`/net register\` before posting the support panel.`
     ));
     c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
     return interaction.editReply({ components: [c], flags: CV2EPH });
   }
 
@@ -115,7 +115,7 @@ export async function executeSp(interaction) {
 
   // FOOTER text
   panel.addTextDisplayComponents(new TextDisplayBuilder().setContent(
-    `-# ${network.name}  ·  Powered by Paralix Network  ·  Do not misuse this system.`
+    `-# ${network.name}  ·  Powered by Vyron Development  ·  Do not misuse this system.`
   ));
 
   // FOOTER image (bottom)
@@ -171,7 +171,7 @@ export async function handleTypeSelect(interaction) {
       'Select which server\'s leadership you need to reach.'
     ));
     c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
     await interaction.reply({
       components: [c, new ActionRowBuilder().addComponents(serverSelect)],
@@ -201,7 +201,7 @@ async function promptInquiry(interaction, type, networkId) {
     '> Once submitted, a ticket channel will be created for you.'
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   const btn = new ButtonBuilder()
     .setCustomId(`sp_open_modal:${key}`)
@@ -377,7 +377,7 @@ export async function handleInquirySubmit(interaction) {
 
   // Footer text
   info.addTextDisplayComponents(new TextDisplayBuilder().setContent(
-    `-# ${network.name}  ·  Paralix Network  ·  Opened <t:${Math.floor(Date.now() / 1000)}:R>`
+    `-# ${network.name}  ·  Vyron Development  ·  Opened <t:${Math.floor(Date.now() / 1000)}:R>`
   ));
 
   // FOOTER image (bottom)
@@ -437,7 +437,7 @@ export async function handleInquirySubmit(interaction) {
     `Your ticket has been opened: <#${ticketChannel.id}>\n**Ticket ID** \`${ticketId}\``
   ));
   confirmC.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  confirmC.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  confirmC.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   await interaction.editReply({ components: [confirmC], flags: CV2EPH });
 }

@@ -26,7 +26,7 @@ export async function executeStaff(interaction) {
     c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
     c.addTextDisplayComponents(new TextDisplayBuilder().setContent('This server has not been registered in the network.'));
     c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
     return interaction.editReply({ components: [c], flags: CV2EPH });
   }
 
@@ -37,7 +37,7 @@ export async function executeStaff(interaction) {
     c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
     c.addTextDisplayComponents(new TextDisplayBuilder().setContent('Only Network Leaders and Administrators can view staff rosters.'));
     c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
     return interaction.editReply({ components: [c], flags: CV2EPH });
   }
 
@@ -51,7 +51,7 @@ export async function executeStaff(interaction) {
     c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
     c.addTextDisplayComponents(new TextDisplayBuilder().setContent('No servers are registered in the network yet.'));
     c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
     return interaction.editReply({ components: [c], flags: CV2EPH });
   }
 
@@ -64,7 +64,7 @@ export async function executeStaff(interaction) {
       c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
       c.addTextDisplayComponents(new TextDisplayBuilder().setContent('That server is not registered in the network.'));
       c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-      c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+      c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
       return interaction.editReply({ components: [c], flags: CV2EPH });
     }
     const container = await buildStaffContainer(interaction.client, targetNet);
@@ -91,7 +91,7 @@ export async function executeStaff(interaction) {
     'Select which network server\'s staff roster you want to view.'
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   return interaction.editReply({
     components: [c, new ActionRowBuilder().addComponents(select)],
@@ -111,7 +111,7 @@ export async function handleStaffServerSelect(interaction) {
     const c = new ContainerBuilder().setAccentColor(Colors.DANGER);
     c.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## ${E.down}  Server Not Found`));
     c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
     return interaction.editReply({ components: [c], flags: CV2EPH });
   }
 
@@ -134,7 +134,7 @@ async function buildStaffContainer(client, net) {
       `${E.down}  Bot is not in this server — cannot fetch member data.`
     ));
     c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
     return c;
   }
 
@@ -196,7 +196,7 @@ async function buildStaffContainer(client, net) {
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Large));
 
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
-    `-# ${net.name}  ·  Paralix Network  ·  Updated <t:${Math.floor(Date.now() / 1000)}:R>`
+    `-# ${net.name}  ·  Vyron Development  ·  Updated <t:${Math.floor(Date.now() / 1000)}:R>`
   ));
 
   return c;

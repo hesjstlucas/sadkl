@@ -97,7 +97,7 @@ export async function executeManage(interaction) {
     `**Registered** <t:${Math.floor(network.registeredAt / 1000)}:D> by <@${network.registeredBy}>`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   return interaction.editReply({ components: [c], flags: CV2EPH });
 }
@@ -108,7 +108,7 @@ function noNetworkReply(interaction) {
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent('This server has not been registered in the network.'));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
   return interaction.editReply({ components: [c], flags: CV2EPH });
 }
 
@@ -118,6 +118,6 @@ function noPerm(interaction) {
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent('Only Network Leaders and Administrators can view the dashboard.'));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
   return interaction.editReply({ components: [c], flags: CV2EPH });
 }

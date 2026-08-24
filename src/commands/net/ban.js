@@ -51,7 +51,7 @@ export async function executeBan(interaction) {
     `**Network Propagation**\n${results.length ? results.join('\n') : '—  No other servers in network.'}`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   return interaction.editReply({ components: [c], flags: CV2EPH });
 }
@@ -64,7 +64,7 @@ function noNetworkReply(interaction) {
     'This server is not registered in any network. Run `/net register` first.'
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
   return interaction.editReply({ components: [c], flags: CV2EPH });
 }
 
@@ -76,6 +76,6 @@ function noPerm(interaction) {
     'You must be a Network Leader or Administrator to use this command.'
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
   return interaction.editReply({ components: [c], flags: CV2EPH });
 }

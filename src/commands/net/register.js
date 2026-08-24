@@ -37,7 +37,7 @@ export async function execute(interaction) {
       `This server is already registered as **${existing.name}**.\nContact a Network Leader to update the configuration.`
     ));
     c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+    c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
     return interaction.editReply({ components: [c], flags: CV2EPH });
   }
 
@@ -59,7 +59,7 @@ export async function execute(interaction) {
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## ${E.check}  Server Registered`));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
-    `**${name}** has been successfully added to the Paralix Network.`
+    `**${name}** has been successfully added to the Vyron Development.`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(false).setSpacing(SeparatorSpacingSize.Small));
   c.addTextDisplayComponents(new TextDisplayBuilder().setContent(
@@ -73,7 +73,7 @@ export async function execute(interaction) {
     `**Leadership IDs** ${leadership.map(l => `<@${l}>`).join(', ')}`
   ));
   c.addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small));
-  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Paralix Network Management'));
+  c.addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Vyron Development'));
 
   return interaction.editReply({ components: [c], flags: CV2EPH });
 }

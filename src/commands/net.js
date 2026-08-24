@@ -12,12 +12,12 @@ import { executeStaff }     from './net/staff.js';
 
 export const data = new SlashCommandBuilder()
   .setName('net')
-  .setDescription('Paralix Network Management')
+  .setDescription('Vyron Development')
 
   // register
   .addSubcommand(sub =>
     sub.setName('register')
-       .setDescription('Register this server into the Paralix Network')
+       .setDescription('Register this server into the Vyron Development')
        .addStringOption(o => o.setName('name').setDescription('Server display name').setRequired(true))
        .addStringOption(o => o.setName('invite').setDescription('Permanent invite link').setRequired(true))
        .addStringOption(o => o.setName('leadership').setDescription('Leadership user IDs (comma-separated)').setRequired(true))

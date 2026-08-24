@@ -1,6 +1,6 @@
 /**
  * ─── Custom Emoji Config ───────────────────────────────────────────────────
- * All IDs sourced from the Paralix server.
+ * All IDs sourced from the Vyron Development server.
  */
 
 export const E = {
